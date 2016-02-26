@@ -38,8 +38,6 @@ Assume present working directory: "/home/chuck/foo/bar/head/foot/alpha/bravo/cha
 
 `up ch<TAB><TAB>` Shows a list of possible completions: "charlie/ chuck/".
 
-`up chuck/f<TAB>` Given a valid parent identifier, up allows you to descend into the parent directory's contents using cd-like completion.
-
 `up -` Returns to the previous working directory. Alias of `cd -`.
 
 ## INSTALLATION
