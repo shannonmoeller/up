@@ -1,19 +1,21 @@
-#!sh
 # up.sh: Quickly traverse up the current working path.
 # Author: Shannon Moeller <me@shannonmoeller.com>
 # Source to use: [ -f /path/to/up.sh ] && . /path/to/up.sh
+# vim: set filetype=sh
 
 __upreply() {
     if [[ -n ${ZSH_VERSION-} ]]; then
+        # zsh is 1-base
         echo ${__UPREPLY[$1 + 1]}
     else
+        # bash is 0-base
         echo ${__UPREPLY[$1]}
     fi
 }
 
 __upfind() {
 	# find matching files and directories
-    local name=$(__upreply 1) && find "$(__upreply 0)" -name "${name#*/}*" -type $1 -follow -maxdepth 1 -mindepth 1 2> /dev/null | xargs printf "%s$2\n" | cut -b $(__upreply 2)-
+    local name="$(__upreply 1)" && find "$(__upreply 0)" -name "${name#*/}*" -type $1 -follow -maxdepth 1 -mindepth 1 2> /dev/null | xargs printf "%s$2\n" | cut -b $(__upreply 2)-
 }
 
 __upnum() {
