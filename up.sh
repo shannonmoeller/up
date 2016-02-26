@@ -4,18 +4,13 @@
 # vim: set filetype=sh
 
 __upreply() {
-    if [[ -n ${ZSH_VERSION-} ]]; then
-        # zsh is 1-base
-        echo ${__UPREPLY[$1 + 1]}
-    else
-        # bash is 0-base
-        echo ${__UPREPLY[$1]}
-    fi
+	# bash is 0-base, zsh is 1-base.
+	[[ -n ${ZSH_VERSION-} ]] && echo ${__UPREPLY[$1 + 1]} || echo ${__UPREPLY[$1]}
 }
 
 __upfind() {
 	# find matching files and directories
-    local name="$(__upreply 1)" && find "$(__upreply 0)" -name "${name#*/}*" -type $1 -follow -maxdepth 1 -mindepth 1 2> /dev/null | xargs printf "%s$2\n" | cut -b $(__upreply 2)-
+	local name="$(__upreply 1)" && find "$(__upreply 0)" -name "${name#*/}*" -type $1 -follow -maxdepth 1 -mindepth 1 2> /dev/null | xargs printf "%s$2\n" | cut -b $(__upreply 2)-
 }
 
 __upnum() {
@@ -39,7 +34,9 @@ __upgen() {
 	local f="${b##*/}" && [[ -n $f ]] && f="/$f"
 
 	# set reply
-	local i="${d%/*}" && __UPREPLY=("$d${b%/*}" "$f" "$[${#i} + 2]")
+	local i="${d%/*}"
+
+	__UPREPLY=( "$d${b%/*}" "$f" "$[${#i} + 2]" )
 }
 
 _up() {
@@ -69,8 +66,8 @@ up() {
 
 # zsh compatibility
 if [[ -n ${ZSH_VERSION-} ]]; then
-  autoload -U +X bashcompinit && bashcompinit
+	autoload -U +X bashcompinit && bashcompinit
 fi
 
 # tab-completion
-complete -o bashdefault -o default -o filenames -o nospace -F _up up
+complete -o filenames -o nospace -F _up up
