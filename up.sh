@@ -1,64 +1,79 @@
+#!/usr/bin/env sh
 # up.sh: Quickly traverse up the current working path.
 # Author: Shannon Moeller <me@shannonmoeller.com>
 # Source to use: [ -f /path/to/up.sh ] && . /path/to/up.sh
-# vim: set filetype=sh
 
-__upreply() {
-	# bash is 0-base, zsh is 1-base.
-	[[ -n ${ZSH_VERSION-} ]] && echo ${__UPREPLY[$1 + 1]} || echo ${__UPREPLY[$1]}
-}
+__updir() {
+	if [[ "$1" == "/" || -z "$1" || -z "$2" ]]; then
+		return
+	fi
 
-__upfind() {
-	# find matching files and directories
-	local name="$(__upreply 1)" && find "$(__upreply 0)" -name "${name#*/}*" -type $1 -follow -maxdepth 1 -mindepth 1 2> /dev/null | xargs printf "%s$2\n" | cut -b $(__upreply 2)-
+	local p="$(dirname $1)"
+	local a="$(basename $p)"
+	local b="$(basename $2)"
+
+	if [[ -z "$a" || -z "$b" ]]; then
+		return
+	fi
+
+	if [[ "$a" == "$b"* ]]; then
+		echo "$p"
+		return
+	fi
+
+	__updir "$p" "$2"
 }
 
 __upnum() {
-	# step up N directories
-	[[ $1 =~ ^[0-9]+$ ]] && local p=$PWD i=$1 && while (( i-- )); do p=${p%/*}; done && ([[ -n $p ]] && echo $p || echo /)
-}
+	if [[ -z "$1" || -z "$2" || ! "$2" =~ ^[0-9]+$ ]]; then
+		return
+	fi
 
-__updir() {
-	# step up until a match is found
-	[[ -n $1 ]] && local p=$PWD && while [[ -n $p ]]; do p=${p%/*} && [[ $1 == ${p##*/} ]] && echo $p && return; done
-}
+	local p="$1"
+	local i="$2"
 
-__upgen() {
-	# split on first /
-	local w="${1//\\/}" && [[ $w == */* ]] && local a="${w%%/*}" b="/${w#*/}" || local a="$w" b=''
+	while (( i-- )); do
+		p="$(dirname $p)"
+	done
 
-	# step up to dir|N
-	local d="$(__updir "$a")" && [[ -n $d ]] || local d="$(__upnum "$a")"
-
-	# add leading slash to filename
-	local f="${b##*/}" && [[ -n $f ]] && f="/$f"
-
-	# set reply
-	local i="${d%/*}"
-
-	__UPREPLY=( "$d${b%/*}" "$f" "$[${#i} + 2]" )
+	echo "$p"
 }
 
 _up() {
-	# localize variables
-	local w="${COMP_WORDS[COMP_CWORD]}" p="${PWD%/*}"
+	local p="$(dirname $PWD)"
+	local w="${COMP_WORDS[COMP_CWORD]}"
 
-	# complete parent dir
-	COMPREPLY=( $(compgen -S/ -W "${p//\// }" -- $w) ) && (( ${#COMPREPLY} > 0 )) && return
-
-	# complete N or sub dir
-	__upgen $w && [[ -n $(__upreply 0) ]] && COMPREPLY=( $(__upfind d / && __upfind f) )
+	COMPREPLY=( $(IFS=';' compgen -S/ -W "${p//\//;}" -- "$w") )
 }
 
 up() {
 	# up one dir
-	(( ! $# )) && cd .. && return
+	if (( ! $# )); then
+		cd ..
+		return
+	fi
 
-	# up dir|N
-	__upgen "$1" && local d="$(__upreply 0)" && [[ -n $d ]] && cd "$d$(__upreply 1)" && return
+	# up dir
+	local d="$(__updir "$PWD" "$1")"
 
-	# cd fallback
-	[[ $1 == - || -d $1 ]] && cd $1 && return
+	if [[ -n "$d" ]]; then
+		cd "$d"
+		return
+	fi
+
+	# up num
+	local n="$(__upnum "$PWD" "$1")"
+
+	if [[ -n "$n" ]]; then
+		cd "$n"
+		return
+	fi
+
+	# fallback
+	if [[ $1 == - || -d $1 ]]; then
+		cd $1
+		return
+	fi
 
 	# usage
 	echo -e "usage: up [dir|N]\npwd: $PWD"
@@ -70,4 +85,4 @@ if [[ -n ${ZSH_VERSION-} ]]; then
 fi
 
 # tab-completion
-complete -o filenames -o nospace -F _up up
+complete -o nospace -F _up up
