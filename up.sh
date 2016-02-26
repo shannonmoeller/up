@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+
 # up.sh: Quickly traverse up the current working path.
 # Author: Shannon Moeller <me@shannonmoeller.com>
 # Source to use: [ -f /path/to/up.sh ] && . /path/to/up.sh
