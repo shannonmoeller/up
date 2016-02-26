@@ -56,7 +56,7 @@ up() {
 	# up dir
 	local d="$(__updir "$PWD" "$1")"
 
-	if [[ -n "$d" ]]; then
+	if [[ -d "$d" ]]; then
 		cd "$d"
 		return
 	fi
@@ -64,7 +64,7 @@ up() {
 	# up num
 	local n="$(__upnum "$PWD" "$1")"
 
-	if [[ -n "$n" ]]; then
+	if [[ -d "$n" ]]; then
 		cd "$n"
 		return
 	fi
