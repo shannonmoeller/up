@@ -1,11 +1,19 @@
-#!bash
+#!sh
 # up.sh: Quickly traverse up the current working path.
 # Author: Shannon Moeller <me@shannonmoeller.com>
 # Source to use: [ -f /path/to/up.sh ] && . /path/to/up.sh
 
+__upreply() {
+    if [[ -n ${ZSH_VERSION-} ]]; then
+        echo ${__UPREPLY[$1 + 1]}
+    else
+        echo ${__UPREPLY[$1]}
+    fi
+}
+
 __upfind() {
 	# find matching files and directories
-	find "${__UPREPLY[0]}" -name "${__UPREPLY[1]#*/}*" -type $1 -follow -maxdepth 1 -mindepth 1 2> /dev/null | xargs printf "%s$2\n" | cut -b ${__UPREPLY[2]}-
+    local name=$(__upreply 1) && find "$(__upreply 0)" -name "${name#*/}*" -type $1 -follow -maxdepth 1 -mindepth 1 2> /dev/null | xargs printf "%s$2\n" | cut -b $(__upreply 2)-
 }
 
 __upnum() {
@@ -29,7 +37,7 @@ __upgen() {
 	local f="${b##*/}" && [[ -n $f ]] && f="/$f"
 
 	# set reply
-	local i="${d%/*}" && __UPREPLY=( [0]="$d${b%/*}" [1]="$f" [2]=$[${#i} + 2] )
+	local i="${d%/*}" && __UPREPLY=("$d${b%/*}" "$f" "$[${#i} + 2]")
 }
 
 _up() {
@@ -40,7 +48,7 @@ _up() {
 	COMPREPLY=( $(compgen -S/ -W "${p//\// }" -- $w) ) && (( ${#COMPREPLY} > 0 )) && return
 
 	# complete N or sub dir
-	__upgen $w && [[ -n ${__UPREPLY[0]} ]] && COMPREPLY=( $(__upfind d / && __upfind f) )
+	__upgen $w && [[ -n $(__upreply 0) ]] && COMPREPLY=( $(__upfind d / && __upfind f) )
 }
 
 up() {
@@ -48,7 +56,7 @@ up() {
 	(( ! $# )) && cd .. && return
 
 	# up dir|N
-	__upgen "$1" && local d="${__UPREPLY[0]}" && [[ -n $d ]] && cd "$d${__UPREPLY[1]}" && return
+	__upgen "$1" && local d="$(__upreply 0)" && [[ -n $d ]] && cd "$d$(__upreply 1)" && return
 
 	# cd fallback
 	[[ $1 == - || -d $1 ]] && cd $1 && return
@@ -56,6 +64,11 @@ up() {
 	# usage
 	echo -e "usage: up [dir|N]\npwd: $PWD"
 }
+
+# zsh compatibility
+if [[ -n ${ZSH_VERSION-} ]]; then
+  autoload -U +X bashcompinit && bashcompinit
+fi
 
 # tab-completion
 complete -o bashdefault -o default -o filenames -o nospace -F _up up
