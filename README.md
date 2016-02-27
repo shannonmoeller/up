@@ -4,7 +4,7 @@ Stop typing `../../..` endlessly. Use tab completion instead! Using `up` allows 
 
 ## Install
 
-Written in 100% shell script, `up.sh` registers itself and some completion functions via your `.bashrc` or `.zshrc` file.
+Written in 100% shell script, `up.sh` registers the `up` function and some completion functions via your `.bashrc` or `.zshrc` file.
 
 ### bash
 
