@@ -1,67 +1,81 @@
-# up.sh
+# `up`
 
-## NAME
+Stop typing `../../..` endlessly. Use tab completion instead! Using `up` allows you to change your current directory to a parent of the current directory where the parent is specified by name or index.
 
-`up` - Traverses up the present working directory.
+## Install
 
-## SYNOPSIS
+Written in 100% shell script, `up.sh` registers itself and some completion functions via your `.bashrc` or `.zshrc` file.
 
-`up dir...`
-
-`up num...`
-
-## DESCRIPTION
-
-Stop typing `../../..` endlessly. Use tab completion instead! Using `up` allows you to change your current directory to a parent of the current directory where the parent is specified by `dir` or `num`.
-
-## OPTIONS
-
-`dir` The name of a parent directory.
-
-`num` The index of a parent directory (indexed in reverse order).
-
-## EXAMPLES
-
-Assume present working directory: "/home/chuck/foo/bar/head/foot/alpha/bravo/charlie".
-
-`up`  Without any options, up is an alias of `cd ..`. Changes the directory to "/home/chuck/foo/bar/head/foot/alpha/bravo".
-
-`up bar` Changes the directory to "/home/chuck/foo/bar".
-
-`up 3` Changes the directory to "/home/chuck/foo/bar/head/foot".
-
-`up <TAB>` Shows a list of the parent directories which can be tab-completed.
-
-`up a<TAB>` Completes to "up alpha/".
-
-`up 4<TAB>` Completes to "up head/".
-
-`up ch<TAB><TAB>` Shows a list of possible completions: "charlie/ chuck/".
-
-`up -` Returns to the previous working directory. Alias of `cd -`.
-
-## INSTALLATION
-
-The script registers completion functions into your shell environment so it should be sourced to use.
-
-### Bash
+### bash
 
 ```
-    curl --create-dirs -o ~/.config/up/up.sh https://raw.githubusercontent.com/shannonmoeller/up/master/up.sh
-    echo 'source ~/.config/up/up.sh' >> ~/.bashrc
+curl --create-dirs -o ~/.config/up/up.sh https://raw.githubusercontent.com/shannonmoeller/up/master/up.sh
+echo 'source ~/.config/up/up.sh' >> ~/.bashrc
 ```
 
-### Zsh
+### zsh
 
 ```
-    curl --create-dirs -o ~/.config/up/up.sh https://raw.githubusercontent.com/shannonmoeller/up/master/up.sh
-    echo 'source ~/.config/up/up.sh' >> ~/.zshrc
+curl --create-dirs -o ~/.config/up/up.sh https://raw.githubusercontent.com/shannonmoeller/up/master/up.sh
+echo 'source ~/.config/up/up.sh' >> ~/.zshrc
 ```
 
-## SEE ALSO
+## Usage
 
-`cd`(1)
+```
+$ up [dir|num|-]
 
-## AUTHOR
+    dir   full or partial name of any parent directory
+    num   number of times you'd have to type `../`
+    -     previous working directory
+```
 
-Written by Shannon Moeller <me@shannonmoeller.com>.
+## Examples
+
+### Up One Level
+
+```
+/home/chuck/foo/bar/baz/head/foot $ up
+/home/chuck/foo/bar/baz/head $
+```
+
+### Up Multiple Levels
+
+```
+/home/chuck/foo/bar/baz/head/foot $ up 4
+/home/chuck/foo $
+```
+
+### Up By Full Name
+
+```
+/home/chuck/foo/bar/baz/head/foot $ up bar
+/home/chuck/foo/bar $
+```
+
+### Up By Partial Name
+
+```
+/home/chuck/foo/bar/baz/head/foot $ up ba
+/home/chuck/foo/bar/baz $
+```
+
+### Tab Completion
+
+```
+/home/chuck/foo/bar/baz/head/foot $ up <TAB>
+bar/    baz/    chuck/  foo/    head/   home/
+
+/home/chuck/foo/bar/baz/head/foot $ up h<TAB>
+head/   home/
+
+/home/chuck/foo/bar/baz/head/foot $ up ho<TAB>
+/home/chuck/foo/bar/baz/head/foot $ up home/
+/home $
+```
+
+----
+
+© Shannon Moeller <me@shannonmoeller.com> (shannonmoeller.com)
+
+Licensed under [MIT](http://shannonmoeller.com/mit.txt)

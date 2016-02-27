@@ -48,7 +48,7 @@ _up() {
 }
 
 up() {
-	# up one dir
+	# up one
 	if (( ! $# )); then
 		cd ..
 		return
@@ -77,7 +77,7 @@ up() {
 	fi
 
 	# usage
-	echo -e "usage: up [dir|N]\npwd: $PWD"
+	echo -e "usage: up [dir|num|-]\npwd: $PWD"
 }
 
 # zsh compatibility
