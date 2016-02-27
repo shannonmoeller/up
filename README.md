@@ -32,35 +32,35 @@ $ up [dir|num|-]
 
 ## Examples
 
-### Up One Level
+Up one level:
 
 ```
 /home/chuck/foo/bar/baz/head/foot $ up
 /home/chuck/foo/bar/baz/head $
 ```
 
-### Up Multiple Levels
+Up multiple levels:
 
 ```
 /home/chuck/foo/bar/baz/head/foot $ up 4
 /home/chuck/foo $
 ```
 
-### Up By Full Name
+Up by full name:
 
 ```
 /home/chuck/foo/bar/baz/head/foot $ up bar
 /home/chuck/foo/bar $
 ```
 
-### Up By Partial Name
+Up by partial name:
 
 ```
 /home/chuck/foo/bar/baz/head/foot $ up ba
 /home/chuck/foo/bar/baz $
 ```
 
-### Tab Completion
+Tab completion:
 
 ```
 /home/chuck/foo/bar/baz/head/foot $ up <TAB>
