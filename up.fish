@@ -78,7 +78,16 @@ function up
   echo -e "usage: up [dir|num|-]\npwd: $PWD"
 end
 
-complete -c up -w "(ls ..)"
+function _up 
+  #set --local p (ls ..)
+  set --local p (string split / $PWD)
+
+  for d in $p 
+    echo $d
+  end
+end
+
+complete -c up -fa "(_up)"
 funcsave up
 funcsave _updir
 funcsave _upnum
