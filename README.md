@@ -25,7 +25,7 @@ echo 'source ~/.config/up/up.sh' >> ~/.zshrc
 ### fish
 
 ```
-curl --create-dirs -o ~/.config/up/up.sh https://raw.githubusercontent.com/shannonmoeller/up/master/up.sh
+curl --create-dirs -o ~/.config/up/up.sh https://raw.githubusercontent.com/shannonmoeller/up/master/up.fish
 source ~/.config/up/up.fish
 ```
 
