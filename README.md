@@ -6,7 +6,7 @@ Stop typing `../../..` endlessly. Use tab completion instead! Using `up` allows 
 
 Written in 100% shell script, `up.sh` registers the `up` function and some completion functions via your `.bashrc` or `.zshrc` file.
 
-Written in 100% shell script, `up.fish` registers the `up` function and some completeion functions via `funcsave`.
+Written in 100% shell script, `up.fish` registers the `up` function and some completion functions via `funcsave`.
 
 ### bash
 
@@ -25,8 +25,8 @@ echo 'source ~/.config/up/up.sh' >> ~/.zshrc
 ### fish
 
 ```
-curl --create-dirs -o ~/.config/up/up.sh https://raw.githubusercontent.com/shannonmoeller/up/master/up.sh
-source ~/.config/up/up.shc
+curl --create-dirs -o ~/.config/up/up.sh https://raw.githubusercontent.com/shannonmoeller/up/master/up.fish
+source ~/.config/up/up.fish
 ```
 
 ## Usage
@@ -47,8 +47,6 @@ Up one level:
 /home/chuck/foo/bar/baz/head/foot $ up
 /home/chuck/foo/bar/baz/head $
 ```
-curl --create-dirs -o ~/.config/up/up.sh https://raw.githubusercontent.com/shannonmoeller/up/master/up.sh
-echo 'source ~/.config/up/up.sh' >> ~/.bashrc
 
 Up multiple levels:
 
