@@ -4,11 +4,11 @@
 # [      Author      ] endowdly           
 # [       Email      ] endowdly@gmail.com
 # [   Date Created   ] 23 May, 2017
-# [   Last Modified  ] 
+# [   Last Modified  ] 26 May, 2017
 #
 # fish fork from up.sh by Shannon Moeller <me@shannonmoeller.com>
 #
-# source to use: source /path/to/up/fish
+# source to use: source /path/to/up/up.fish
 
 function _updir 
   if test $argv[1] = '/' -o -z $argv[1] -o -z $argv[2]
@@ -33,7 +33,6 @@ function _updir
 end 
 
 function _upnum
-  
   if test -z $argv[1] -o -z $argv[2] 
     return
   end
@@ -79,7 +78,7 @@ function up
   echo -e "usage: up [dir|num|-]\npwd: $PWD"
 end
 
-complete -c up
+complete -c up -w "(ls ..)"
 funcsave up
 funcsave _updir
 funcsave _upnum
