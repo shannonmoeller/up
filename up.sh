@@ -9,9 +9,9 @@ __updir() {
 		return
 	fi
 
-	local p="$(dirname $1)"
-	local a="$(basename $p)"
-	local b="$(basename $2)"
+	local p="$(dirname "$1")"
+	local a="$(basename "$p")"
+	local b="$(basename "$2")"
 
 	if [[ -z "$a" || -z "$b" ]]; then
 		return
@@ -34,7 +34,7 @@ __upnum() {
 	local i="$2"
 
 	while (( i-- )); do
-		p="$(dirname $p)"
+		p="$(dirname "$p")"
 	done
 
 	echo "$p"
