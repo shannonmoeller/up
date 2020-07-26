@@ -44,7 +44,7 @@ _up() {
 	local p="$(dirname "$PWD")"
 	local w="${COMP_WORDS[COMP_CWORD]}"
 
-	COMPREPLY=( $(IFS=';' compgen -S/ -W "${p//\//;}" -- "$w") )
+	COMPREPLY=( $(IFS='/' compgen -S/ -W "$p" -- "$w") )
 }
 
 up() {
