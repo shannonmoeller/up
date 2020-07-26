@@ -44,7 +44,8 @@ _up() {
 	local p="$(dirname "$PWD")"
 	local w="${COMP_WORDS[COMP_CWORD]}"
 
-	COMPREPLY=( $(IFS='/' compgen -S/ -W "$p" -- "$w") )
+	COMPREPLY=()
+	while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(IFS='/' compgen -S/ -W "$p" -- "$w")
 }
 
 up() {
