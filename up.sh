@@ -41,10 +41,11 @@ __upnum() {
 }
 
 _up() {
-	local p="$(dirname $PWD)"
+	local p="$(dirname "$PWD")"
 	local w="${COMP_WORDS[COMP_CWORD]}"
 
-	COMPREPLY=( $(IFS=';' compgen -S/ -W "${p//\//;}" -- "$w") )
+	COMPREPLY=()
+	while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(IFS='/' compgen -S/ -W "$p" -- "$w")
 }
 
 up() {
@@ -71,8 +72,8 @@ up() {
 	fi
 
 	# fallback
-	if [[ $1 == - || -d $1 ]]; then
-		cd $1
+	if [[ "$1" == - || -d "$1" ]]; then
+		cd "$1"
 		return
 	fi
 
